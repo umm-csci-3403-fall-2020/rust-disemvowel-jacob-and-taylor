@@ -26,8 +26,8 @@ fn main() {
     //  * Write the disemvoweled text using write_file
 
     // Replace String::from("test") with what you get from read_file
-    let filePath = Path::new(&args[1]);
-    let s = read_file(filePath);
+    let file_path = Path::new(&args[1]);
+    let s = read_file(file_path);
 
     let s_disemvowel = disemvowel(&s);
 
@@ -45,7 +45,15 @@ fn write_file(path: &Path, s: &str) {
 
 //TODO: Return the input string without vowels.
 fn disemvowel(s: &str) -> String {
-    String::from(s)
+    let string = String::from(s); //Create a mutable string from the input
+    let mut new_string = String::new(); //Create a new, empty string to be filled with non-vowels
+    for _chars in string.chars() {
+	match _chars {
+	  'a' | 'e' | 'i' | 'o' | 'u' | 'A' | 'E' | 'I' | 'O' | 'U' => {}
+	  _ => new_string.push(_chars),
+	}
+    }
+    return new_string;
 }
 
 // Everything from here down is Rust test code. You shouldn't need to
@@ -116,7 +124,7 @@ mod tests {
         use super::*;
         #[test]
         fn requires_two_arguments() {
-            let mut cmd = Command::cargo_bin("rust-disemvowel").unwrap();
+            let mut cmd = Command::cargo_bin("disemvowel-in-rust").unwrap();
             cmd.arg("1");
             cmd.assert()
                 .failure()
@@ -124,7 +132,7 @@ mod tests {
         }
         #[test]
         fn requires_read_file() {
-            let mut cmd = Command::cargo_bin("rust-disemvowel").unwrap();
+            let mut cmd = Command::cargo_bin("disemvowel-in-rust").unwrap();
             cmd.arg("/this/path/does/not/exist")
                 .arg("output/path/doesnt/matter");
             cmd.assert()
